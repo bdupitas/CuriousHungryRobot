@@ -1,7 +1,6 @@
-package com.bdupitas.calcApp;
+package com.bdupitas.CHR;
 
-import java.awt.Point;
-interface CHR{ //holds all constants for now
+interface CuriousHungryRobot { //holds all constants for now
    final double energyInitialCapacity = 300; //UPDATE #2 ROBOT starts at 300;
    final int energyLocations = 33; //Also # of objects //UPDATE#2
    final double planeEnergyRadius = 200; //this is as far as the points are able to go, 

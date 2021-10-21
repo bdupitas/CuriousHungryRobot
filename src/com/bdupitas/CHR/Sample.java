@@ -1,4 +1,4 @@
-package com.bdupitas.calcApp;
+package com.bdupitas.CHR;
 
 import java.util.*;
 public class Sample{

@@ -1,18 +1,18 @@
-package com.bdupitas.calcApp;
+package com.bdupitas.CHR;
 
 import java.awt.Point;
 
 //The physical state of the robot and physical battery
-public class robot implements CHR {
-   private energy robotBattery; //holds the current energy level of Henry; however this will serve as a way to access energy 
+public class Robot implements CuriousHungryRobot {
+   private Energy robotBattery; //holds the current energy level of Henry; however this will serve as a way to access energy
    private Point gps; 
-   private energy radar; // the energy is a force
+   private Energy radar; // the energy is a force
    private double mileage;
        
-   public robot(){//initializer
-      this.robotBattery = new energy(energyInitialCapacity);
+   public Robot(){//initializer
+      this.robotBattery = new Energy(energyInitialCapacity);
       this.gps = new Point();
-      this.radar = new energy(); 
+      this.radar = new Energy();
       this.mileage=0;
    }
    public double getEnergy(){
@@ -96,17 +96,17 @@ public class robot implements CHR {
    protected void radarCheck(){ //this tells energy to be placed on the grid
       this.radar.EnergyPoint();
    }
-   protected energy detect(){        //detection
+   protected Energy detect(){        //detection
       double rX = this.gps.getX();
       double rY= this.gps.getY();
-      energy temp = radar.ping(rX,rY);
+      Energy temp = radar.ping(rX,rY);
       if(temp != null){
          return temp;
       }
       return null;
    } 
-   protected void consumeEnergy(energy hGoal){
-      energy temp = hGoal;
+   protected void consumeEnergy(Energy hGoal){
+      Energy temp = hGoal;
       double charge = hGoal.getCharge();
       double currentBatt = this.robotBattery.checkBattery();
       if(charge+currentBatt>robotEnergyCapacity){
