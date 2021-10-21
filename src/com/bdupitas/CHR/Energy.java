@@ -11,11 +11,26 @@ public class Energy implements CuriousHungryRobot {
     private Point hub; // energy stores
     private boolean reached; // this will hold values if reached or not before, this will prevent a point from being redetected and stored
 
+
+
+
     Energy() { // and the energy hub
         this.charge = energyInitialCapacity;
         this.hub = new Point(); // point
         this.hub.setLocation(genRandcoord(), genRandcoord());
         this.reached = false;
+    }
+
+    public void EnergyPoint() {
+        Energy[] energyHub = new Energy[energyLocations]; //produces n charges
+        this.energypoint = new ArrayList<>();
+
+        for (Energy name : energyHub) {
+            name = new Energy(); //assigns points
+            energypoint.add(name); //addint these points after they have all been instantiated to the arraylist
+
+        }
+        verifyIntervals();
     }
 
     Energy(double x) {
@@ -77,18 +92,6 @@ public class Energy implements CuriousHungryRobot {
 
     }
 
-
-    public void EnergyPoint() {
-        Energy[] energyHub = new Energy[energyLocations]; //produces n charges
-        this.energypoint = new ArrayList<>();
-
-        for (Energy name : energyHub) {
-            name = new Energy(); //assigns points
-            energypoint.add(name); //addint these points after they have all been instantiated to the arraylist
-
-        }
-        verifyIntervals();
-    }
 
     void verifyIntervals() { //change it to a nested for
         boolean badpoint = true;

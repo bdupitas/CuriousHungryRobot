@@ -16,7 +16,8 @@ public class Main extends Robot {
                 Robot rob1 = new Robot();
                 rob1.radarCheck();
                 Point curiousPoint = null, hungryPoint = null; //
-                Energy hGoal = null; //is a point of energy
+
+                Energy hungerLevel = null;
 
                 Deque<Energy> memory = new ArrayDeque<Energy>(); // Memory of Points
 
@@ -46,17 +47,17 @@ public class Main extends Robot {
                     if (hungryState) { //hungry state
 
                         if (hGoalExists != true) {
-                            hGoal = getHungryGoal(memory, stackMem, queueMem, curiousState, rob1);
-                            if (hGoal == null) { //switches cases for this move
+                            hungerLevel = getHungryGoal(memory, stackMem, queueMem, curiousState, rob1);
+                            if (hungerLevel == null) { //switch cases for this move
                                 curiousState = true;
                                 hungryState = false;
                                 continue;
                             }
-                            if (hGoal != null) {
+                            if (hungerLevel != null) {
                                 hGoalExists = true;
                                 hGoalReached = !hGoalExists;
-                                int x = (int) (hGoal.getX());
-                                int y = (int) (hGoal.getY());
+                                int x = (int) (hungerLevel.getX());
+                                int y = (int) (hungerLevel.getY());
                                 hungryPoint = new Point(x, y);
                             }
                         } else if (hGoalExists && !hGoalReached) {
@@ -66,7 +67,7 @@ public class Main extends Robot {
 
                         }
                         if (hGoalReached) {
-                            rob1.consumeEnergy(hGoal);
+                            rob1.consumeEnergy(hungerLevel);
                             hGoalExists = !hGoalReached;
                             hGoalReached = false; //once consumed a new goal should be set
                         }
@@ -97,7 +98,7 @@ public class Main extends Robot {
         }
     }
 
-    static void inactive(Robot Henry, Sample data) { // save statistics for this trial, incrememnt to 1000, then recurse main
+    static void inactive(Robot Henry, Sample data) { // save statistics for this trial, increment to 1000, then recurse main
         double x = Henry.getMileage();
         data.addData(x);
     }
@@ -159,8 +160,8 @@ public class Main extends Robot {
         return e;
     }
 
-    private static void Gwalk(Point cGoal, Robot Henry) { //reguardless of what goal Henry wants to go to, this he will decide which way would be the most optimal
-        Point goal = cGoal; //passes reference no matter if it is hungy or curious
+    private static void Gwalk(Point cGoal, Robot Henry) { //regardless of what goal Henry wants to go to, this he will decide which way would be the most optimal
+        Point goal = cGoal; //passes reference no matter if it is hungry or curious
         boolean xGoal = false, yGoal = false;
 
         //goal location
@@ -184,7 +185,7 @@ public class Main extends Robot {
         }
 
         // these points will also remind Henry that once a point is achieved, to start heading and getting the point
-        if (cPointx < gPointx && cPointy < gPointy && !xGoal && !yGoal) {//North east
+        if (cPointx < gPointx && cPointy < gPointy && !xGoal && !yGoal) {//North-east
             Henry.stepNorthEast();
             return;
         }
