@@ -6,13 +6,16 @@ import java.awt.Point;
 public class Robot implements CuriousHungryRobot {
     private Energy robotBattery; //holds the current energy level of Henry; however this will serve as a way to access energy
     private Point gps;
-    private Energy radar; // the energy is a force
     private double mileage; // the distance traveled
+    private EnergyField field;
+
+
 
     public Robot() {//initializer
-        this.robotBattery = new Energy(energyInitialCapacity);
-        this.gps = new Point();
-        this.radar = new Energy();
+        field = new EnergyField();
+        this.robotBattery = new Energy(robotEnergyCapacity);
+        this.gps = new Point(0,0);
+
         this.mileage = 0;
     }
 
@@ -36,6 +39,10 @@ public class Robot implements CuriousHungryRobot {
 
     public double currentY() {
         return this.gps.getY();
+    }
+
+    public Point currentLocation(){
+        return this.gps;
     }
 
     public void setLocation(double X2, double Y2) {
@@ -101,16 +108,10 @@ public class Robot implements CuriousHungryRobot {
         this.robotBattery.DrainEnergy(v); //the state of power comes from energy, but is within the battery pack of the robot
     }
 
-    protected void radarCheck() { //this tells energy to be placed on the grid
-        this.radar.EnergyPoint();
-    }
-
-    protected Energy detect() {        //detection
-        double rX = this.gps.getX();
-        double rY = this.gps.getY();
-        Energy temp = radar.ping(rX, rY);
-        if (temp != null) {
-            return temp;
+    protected Energy detect() {    // ? is this a constructor?
+        Energy nearestEnergy = robotBattery.ping(this.gps.getX(), this.gps.getY());
+        if (nearestEnergy != null) {
+            return nearestEnergy;
         }
         return null;
     }
@@ -131,5 +132,4 @@ public class Robot implements CuriousHungryRobot {
 
 
     }
-
 }

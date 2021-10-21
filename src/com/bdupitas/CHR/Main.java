@@ -14,10 +14,8 @@ public class Main extends Robot {
             int trialNo = 0; //up to 1000
             while (trialNo < simulationTrial) {
                 Robot rob1 = new Robot();
-                rob1.radarCheck();
                 Point curiousPoint = null, hungryPoint = null; //
-
-                Energy hungerLevel = null;
+                Energy hungerGoal = null;
 
                 Deque<Energy> memory = new ArrayDeque<Energy>(); // Memory of Points
 
@@ -47,17 +45,17 @@ public class Main extends Robot {
                     if (hungryState) { //hungry state
 
                         if (hGoalExists != true) {
-                            hungerLevel = getHungryGoal(memory, stackMem, queueMem, curiousState, rob1);
-                            if (hungerLevel == null) { //switch cases for this move
+                            hungerGoal = getHungryGoal(memory, stackMem, queueMem, curiousState, rob1);
+                            if (hungerGoal == null) { //switch cases for this move
                                 curiousState = true;
                                 hungryState = false;
                                 continue;
                             }
-                            if (hungerLevel != null) {
+                            if (hungerGoal != null) {
                                 hGoalExists = true;
                                 hGoalReached = !hGoalExists;
-                                int x = (int) (hungerLevel.getX());
-                                int y = (int) (hungerLevel.getY());
+                                int x = (int) (hungerGoal.getX());
+                                int y = (int) (hungerGoal.getY());
                                 hungryPoint = new Point(x, y);
                             }
                         } else if (hGoalExists && !hGoalReached) {
@@ -67,7 +65,7 @@ public class Main extends Robot {
 
                         }
                         if (hGoalReached) {
-                            rob1.consumeEnergy(hungerLevel);
+                            rob1.consumeEnergy(hungerGoal);
                             hGoalExists = !hGoalReached;
                             hGoalReached = false; //once consumed a new goal should be set
                         }
