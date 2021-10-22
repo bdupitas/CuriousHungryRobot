@@ -1,7 +1,7 @@
 package com.bdupitas.CHR;
 
+import java.awt.*;
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class EnergyField implements CuriousHungryRobot {
@@ -44,23 +44,30 @@ public class EnergyField implements CuriousHungryRobot {
         return (int) ((Math.random() * 401) - 200);
     }
 
-    protected double distancePts(double X1, double Y1, double X2, double Y2) {
+     double distancePts(double X1, double Y1, double X2, double Y2) {
+
+        return Math.sqrt(Math.pow((X2 - X1), 2) + Math.pow((Y2 - Y1), 2));
+    }
+     double distancePoints(Point A, Point B){
+        double X1 = A.getX();
+        double Y1 = A.getY();
+        double X2 = B.getX();
+        double Y2 = B.getY();
+
         return Math.sqrt(Math.pow((X2 - X1), 2) + Math.pow((Y2 - Y1), 2));
     }
 
-    public Energy ping(double rX, double rY) { //returns the location of a point that is close
-        Energy eHub;
+    public Energy ping(Point currentLocation) { //returns the location of a point that is close
+        Energy energyHub;
         for (int i = 0; i < energyPoint.size(); i++) {
-            eHub = energyPoint.get(i);
-            double X = (rX);
-            double Y = (rY);
-            double tX = (eHub.getX());
-            double tY = (eHub.getY());
-            double distance = distancePts(rX, rY, tX, tY);
+            energyHub = energyPoint.get(i);
+
+
+            double distance = distancePoints(currentLocation, energyHub.getLocation());
 
 
             if (distance <= 13) {
-                return eHub;
+                return energyHub;
             }
 
         }

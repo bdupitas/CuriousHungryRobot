@@ -62,12 +62,12 @@ public class Energy implements CuriousHungryRobot {
 
     }
 
-    protected boolean isReached() {
+    protected boolean hasVisited() {
         return reached;
     }
 
-    public void setReached(boolean x) {
-        this.reached = x;
+    public void visited() {
+        this.reached = true;
     }
 
     protected double checkBattery() { //returns robot energy level
@@ -88,6 +88,10 @@ public class Energy implements CuriousHungryRobot {
     public double getY() {
         return this.location.getY();
 
+    }
+
+    public Point getLocation(){
+        return location;
     }
 
     public void setLocation(double x, double y) {
