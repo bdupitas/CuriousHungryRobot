@@ -21,7 +21,6 @@ public class Robot implements CuriousHungryRobot {
 
     public double getEnergy() {
         return robotBattery.checkBattery();
-
     }
 
     public double getMileage() {

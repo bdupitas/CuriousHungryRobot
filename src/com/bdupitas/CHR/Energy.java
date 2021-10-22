@@ -24,7 +24,7 @@ public class Energy implements CuriousHungryRobot {
     }
 
     Energy(int batteryLevel) { // constructor for robot battery
-        this.charge = batteryLevel;
+        this.robotBatteryLevel = batteryLevel;
     }
 
 
