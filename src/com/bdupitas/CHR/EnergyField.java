@@ -5,15 +5,14 @@ import java.util.List;
 
 
 public class EnergyField implements CuriousHungryRobot {
-    private ArrayList<Energy> energyPoint = new ArrayList<>();
+    private ArrayList<Energy> energyPoint;
 
     EnergyField() {
+        energyPoint = new ArrayList<>();
         for (int i = 0; i < numberOfEnergyHubs; i++) {
-            Energy temp = new Energy();
+            Energy temp = new Energy(randomCoordinate(),randomCoordinate());
             energyPoint.add(temp);
-            System.out.println(i);
         }
-
         verifyIntervals();
     }
 
@@ -49,9 +48,8 @@ public class EnergyField implements CuriousHungryRobot {
         return Math.sqrt(Math.pow((X2 - X1), 2) + Math.pow((Y2 - Y1), 2));
     }
 
-    protected Energy ping(double rX, double rY) { //returns the location of a point that is close
+    public Energy ping(double rX, double rY) { //returns the location of a point that is close
         Energy eHub;
-        List<Energy> temp = this.energyPoint;
         for (int i = 0; i < energyPoint.size(); i++) {
             eHub = energyPoint.get(i);
             double X = (rX);

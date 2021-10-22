@@ -13,7 +13,7 @@ public class Robot implements CuriousHungryRobot {
 
     public Robot() {//initializer
         field = new EnergyField();
-        this.robotBattery = new Energy(robotEnergyCapacity);
+        this.robotBattery = new Energy((int) robotEnergyCapacity);
         this.gps = new Point(0,0);
 
         this.mileage = 0;
@@ -108,8 +108,15 @@ public class Robot implements CuriousHungryRobot {
         this.robotBattery.DrainEnergy(v); //the state of power comes from energy, but is within the battery pack of the robot
     }
 
+//    private Energy nearestGoal(){
+//
+//    }
+
+
     protected Energy detect() {    // ? is this a constructor?
-        Energy nearestEnergy = robotBattery.ping(this.gps.getX(), this.gps.getY());
+
+        // return nearest energy
+        Energy nearestEnergy = field.ping(this.gps.getX(), this.gps.getY());
         if (nearestEnergy != null) {
             return nearestEnergy;
         }

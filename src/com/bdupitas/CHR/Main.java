@@ -236,7 +236,8 @@ public class Main extends Robot {
     }
 
     private static void detectEnergy(Robot Henry, boolean stackMem, boolean queueMem, Deque<Energy> memory) {
-        Energy temp = Henry.detect();
+
+        Energy temp = Henry.detect(); // this locates nearest energy
 
         if (temp != null) {
             boolean reached = temp.isReached();

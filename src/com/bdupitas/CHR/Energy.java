@@ -3,7 +3,7 @@ package com.bdupitas.CHR;//the all knowing energy that exists in this virtual si
 import java.awt.Point;
 import java.util.*;
 
-public class Energy extends EnergyField implements CuriousHungryRobot {
+public class Energy implements CuriousHungryRobot {
     private double robotBatteryLevel;//robot has energy, this is where the energy comes from
     private double charge; //the energy hub energy
     protected Energy[] energyLocations; // holds obj
@@ -15,8 +15,12 @@ public class Energy extends EnergyField implements CuriousHungryRobot {
     Energy(){
         this.charge = energyInitialCapacity;
         this.location = new Point(); // point
-        this.location.setLocation(randomCoordinate(), randomCoordinate());
         this.reached = false;
+    }
+
+    Energy(int x, int y){
+        this();
+        this.location.setLocation(x,y);
     }
 
     Energy(int batteryLevel) { // constructor for robot battery
@@ -37,9 +41,9 @@ public class Energy extends EnergyField implements CuriousHungryRobot {
 //        verifyIntervals();
 //    }
 
-    Energy(double x) {
-        this.robotBatteryLevel = x; //initilizes robot Energy
-    }
+//    Energy(double x) {
+//        this.robotBatteryLevel = x; //initilizes robot Energy
+//    }
 
     public double getCharge() { //returns level of energy hub
         return this.charge;
@@ -92,22 +96,22 @@ public class Energy extends EnergyField implements CuriousHungryRobot {
     }
 
 
-    protected Energy ping(double rX, double rY) { //returns the location of a point that is close
-        Energy eHub;
-        List<Energy> temp = this.energyPoint;
-        for (int i = 0; i < energyPoint.size(); i++) {
-            eHub = energyPoint.get(i);
-            double X = (rX);
-            double Y = (rY);
-            double tX = (eHub.getX());
-            double tY = (eHub.getY());
-            double distance = super.distancePts(rX, rY, tX, tY);
-            if (distance <= 13) {
-                return eHub;
-            }
-
-        }
-
-        return null;
-    }
+//    protected Energy ping(double rX, double rY) { //returns the location of a point that is close
+//        Energy eHub;
+//        List<Energy> temp = this.energyPoint;
+//        for (int i = 0; i < energyPoint.size(); i++) {
+//            eHub = energyPoint.get(i);
+//            double X = (rX);
+//            double Y = (rY);
+//            double tX = (eHub.getX());
+//            double tY = (eHub.getY());
+//            double distance = distancePts(rX, rY, tX, tY);
+//            if (distance <= 13) {
+//                return eHub;
+//            }
+//
+//        }
+//
+//        return null;
+//    }
 }
