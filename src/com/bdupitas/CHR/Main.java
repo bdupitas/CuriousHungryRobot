@@ -1,24 +1,21 @@
 
 package com.bdupitas.CHR;//Mind and States of the Robot
 
-import java.awt.Point;
-import java.util.*;
-
 public class Main implements CuriousHungryRobot {
     public static void main(String[] args) {
         int simulationRun = 0;// 0 - stack, 1 - queue
 
         while (simulationRun < 2) {
             Sample data = new Sample(); //allows for data to be held during this simulation
-            int trialNo = 0; //up to 1000
-            while (trialNo < simulationTrial) {
+            int TrialNumber = 0; //up to 1000
+            while (TrialNumber < TRIAL_LIMIT) {
                 Robot rob1 = new Robot();
 
                 do {
                     rob1.goalWalk(simulationRun);
                 } while ((rob1.getEnergy()) > 0);
                 inactive(rob1, data); //eventually have this report total movement to sample. sample to recurse
-                trialNo++;
+                TrialNumber++;
 
             }
             if (simulationRun == 0) {
@@ -27,12 +24,9 @@ public class Main implements CuriousHungryRobot {
                 data.setName("Queue Memory");
             }
 
+            data.computeStats();
+            System.out.print(data.toString());
 
-            if (simulationRun != 2) {
-                data.computeStats();
-                System.out.printf(data.toString());
-
-            }
 
             simulationRun++;
 

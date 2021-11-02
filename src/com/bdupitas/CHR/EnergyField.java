@@ -10,51 +10,49 @@ public class EnergyField implements CuriousHungryRobot {
     EnergyField() {
         energyPoint = new ArrayList<>();
         for (int i = 0; i < numberOfEnergyHubs; i++) {
-            Energy temp = new Energy(randomCoordinate(),randomCoordinate());
+            Energy temp = new Energy(randomCoordinate(), randomCoordinate());
             energyPoint.add(temp);
         }
         verifyIntervals();
     }
 
     private void verifyIntervals() { //change it to a nested for
-        boolean badpoint = true;
+        boolean badPointExists = true;
         do {
             for (int i = 0; i < energyPoint.size() - 1; i++) {
                 Energy point1 = energyPoint.get(i); //first point
-                double x = point1.getX();
-                double y = point1.getY();
                 for (int k = i + 1; k < energyPoint.size(); k++) {
                     Energy point2 = energyPoint.get(k);
-                    double cx = point2.getX();
-                    double cy = point2.getY();
-                    double distance = distancePts(x, y, cx, cy);
-                    if (distance < 20) {// +- energy interface distance
-                        point2.setLocation(randomCoordinate(), randomCoordinate());
-                        verifyIntervals();
+                    if (distancePoints(point1.getLocation(), point2.getLocation()) < energyIntervals) {// +- energy interface distance
+                        reAdjustLocation(point1, point2);
+                        break;
                     } else {
-                        badpoint = false;
+                        badPointExists = false;
                     }
 
                 }
             }
-        } while (badpoint);
+        } while (badPointExists);
+    }
+
+    private void reAdjustLocation(Energy hub1, Energy hub2) {
+        while (distancePoints(hub1.getLocation(), hub2.getLocation()) < energyIntervals) {
+            hub2.setLocation(randomCoordinate(), randomCoordinate());
+        }
     }
 
     protected int randomCoordinate() {
         return (int) ((Math.random() * 401) - 200);
     }
 
-     double distancePts(double X1, double Y1, double X2, double Y2) {
-
-        return Math.sqrt(Math.pow((X2 - X1), 2) + Math.pow((Y2 - Y1), 2));
-    }
-     double distancePoints(Point A, Point B){
+    double distancePoints(Point A, Point B) {
         double X1 = A.getX();
         double Y1 = A.getY();
         double X2 = B.getX();
         double Y2 = B.getY();
 
-        return Math.sqrt(Math.pow((X2 - X1), 2) + Math.pow((Y2 - Y1), 2));
+        return Math.hypot((X2 - X1), (Y2 - Y1));
+
     }
 
     public Energy ping(Point currentLocation) { //returns the location of a point that is close

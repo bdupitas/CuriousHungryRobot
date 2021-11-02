@@ -75,9 +75,7 @@ public class Energy implements CuriousHungryRobot {
     }
 
     protected void DrainEnergy(double e) {//setter of movement
-        double newE = this.robotBatteryLevel - e;
-        this.robotBatteryLevel = newE;
-
+        this.robotBatteryLevel -= e;
     }
 
     public double getX() {
