@@ -13,7 +13,7 @@ public class Energy implements CuriousHungryRobot {
 
 
     Energy(){
-        this.charge = energyInitialCapacity;
+        this.charge = ENERGY_INITIAL_CAPACITY;
         this.location = new Point(); // point
         this.reached = false;
     }

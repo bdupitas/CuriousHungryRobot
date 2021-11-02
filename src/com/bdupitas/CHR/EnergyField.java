@@ -9,10 +9,11 @@ public class EnergyField implements CuriousHungryRobot {
 
     EnergyField() {
         energyPoint = new ArrayList<>();
-        for (int i = 0; i < numberOfEnergyHubs; i++) {
+        for (int i = 0; i < NUMBER_OF_ENERGY_HUBS; i++) {
             Energy temp = new Energy(randomCoordinate(), randomCoordinate());
             energyPoint.add(temp);
         }
+
         verifyIntervals();
     }
 
@@ -23,7 +24,7 @@ public class EnergyField implements CuriousHungryRobot {
                 Energy point1 = energyPoint.get(i); //first point
                 for (int k = i + 1; k < energyPoint.size(); k++) {
                     Energy point2 = energyPoint.get(k);
-                    if (distancePoints(point1.getLocation(), point2.getLocation()) < energyIntervals) {// +- energy interface distance
+                    if (distancePoints(point1.getLocation(), point2.getLocation()) < ENERGY_INTERVALS) {// +- energy interface distance
                         reAdjustLocation(point1, point2);
                         break;
                     } else {
@@ -36,13 +37,13 @@ public class EnergyField implements CuriousHungryRobot {
     }
 
     private void reAdjustLocation(Energy hub1, Energy hub2) {
-        while (distancePoints(hub1.getLocation(), hub2.getLocation()) < energyIntervals) {
+        while (distancePoints(hub1.getLocation(), hub2.getLocation()) < ENERGY_INTERVALS) {
             hub2.setLocation(randomCoordinate(), randomCoordinate());
         }
     }
 
     protected int randomCoordinate() {
-        return (int) ((Math.random() * 401) - 200);
+        return (int) ((Math.random() * 401) - PLANE_ENERGY_RADIUS);
     }
 
     double distancePoints(Point A, Point B) {
@@ -50,7 +51,6 @@ public class EnergyField implements CuriousHungryRobot {
         double Y1 = A.getY();
         double X2 = B.getX();
         double Y2 = B.getY();
-
         return Math.hypot((X2 - X1), (Y2 - Y1));
 
     }
@@ -59,12 +59,8 @@ public class EnergyField implements CuriousHungryRobot {
         Energy energyHub;
         for (int i = 0; i < energyPoint.size(); i++) {
             energyHub = energyPoint.get(i);
-
-
             double distance = distancePoints(currentLocation, energyHub.getLocation());
-
-
-            if (distance <= 13) {
+            if (distance <= ROBOT_ROBOT_DETECTION_RADIUS) {
                 return energyHub;
             }
 

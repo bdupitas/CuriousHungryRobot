@@ -10,10 +10,9 @@ public class Main implements CuriousHungryRobot {
             int TrialNumber = 0; //up to 1000
             while (TrialNumber < TRIAL_LIMIT) {
                 Robot rob1 = new Robot();
-
-                do {
+                while ((rob1.getEnergy()) > 0) {
                     rob1.goalWalk(simulationRun);
-                } while ((rob1.getEnergy()) > 0);
+                }
                 inactive(rob1, data); //eventually have this report total movement to sample. sample to recurse
                 TrialNumber++;
 

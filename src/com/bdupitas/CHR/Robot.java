@@ -19,7 +19,7 @@ public class Robot implements CuriousHungryRobot {
 
     public Robot() {//initializer
         field = new EnergyField();
-        robotBattery = new Energy((int) robotEnergyCapacity);
+        robotBattery = new Energy((int) ROBOT_ENERGY_CAPACITY);
         gps = new Point(0, 0);
         memory = new ArrayDeque<>();
         mileage = 0;
@@ -57,23 +57,23 @@ public class Robot implements CuriousHungryRobot {
     }
 
     protected void moveNorth() { //north   +Y
-        movement(eRegMovm); // drainenergy
-        this.gps.setLocation(this.gps.getX(), this.gps.getY() + eRegMovm);
+        movement(REGULAR_MOVEMENT); // drainenergy
+        this.gps.setLocation(this.gps.getX(), this.gps.getY() + REGULAR_MOVEMENT);
     }
 
     protected void moveSouth() { //move south  -Y
-        movement(eRegMovm); // drainenergy
-        this.gps.setLocation(this.gps.getX(), this.gps.getY() - eRegMovm);
+        movement(REGULAR_MOVEMENT); // drainenergy
+        this.gps.setLocation(this.gps.getX(), this.gps.getY() - REGULAR_MOVEMENT);
     }
 
     protected void moveWest() { //moves west -x
-        movement(eRegMovm);
-        this.gps.setLocation(this.gps.getX() - eRegMovm, this.gps.getY());
+        movement(REGULAR_MOVEMENT);
+        this.gps.setLocation(this.gps.getX() - REGULAR_MOVEMENT, this.gps.getY());
     }
 
     protected void moveEast() { //moves east +x
-        movement(eRegMovm);
-        this.gps.setLocation(this.gps.getX() + eRegMovm, this.gps.getY());
+        movement(REGULAR_MOVEMENT);
+        this.gps.setLocation(this.gps.getX() + REGULAR_MOVEMENT, this.gps.getY());
     }
 
     protected void snapStraight(double x) {
@@ -90,23 +90,23 @@ public class Robot implements CuriousHungryRobot {
     }
 
     protected void stepNorthEast() { //DIAGONAL Northeast  +x +y
-        movement(diagMovm);
-        this.gps.setLocation(this.gps.getX() + eRegMovm, this.gps.getY() + eRegMovm);
+        movement(DIAGONAL_MOVEMENT);
+        this.gps.setLocation(this.gps.getX() + REGULAR_MOVEMENT, this.gps.getY() + REGULAR_MOVEMENT);
     }
 
     protected void stepNorthWest() { //DIAGONAL Northwest -x +y
-        movement(diagMovm);
-        this.gps.setLocation(this.gps.getX() - eRegMovm, this.gps.getY() + eRegMovm);
+        movement(DIAGONAL_MOVEMENT);
+        this.gps.setLocation(this.gps.getX() - REGULAR_MOVEMENT, this.gps.getY() + REGULAR_MOVEMENT);
     }
 
     protected void stepSouthWest() { //DIAGONAL southWest -x -y
-        movement(diagMovm);
-        this.gps.setLocation(this.gps.getX() - eRegMovm, this.gps.getY() - eRegMovm);
+        movement(DIAGONAL_MOVEMENT);
+        this.gps.setLocation(this.gps.getX() - REGULAR_MOVEMENT, this.gps.getY() - REGULAR_MOVEMENT);
     }
 
     protected void stepSouthEast() { //DIAGONAL SouthEast  +x -y
-        movement(diagMovm);
-        this.gps.setLocation(this.gps.getX() + eRegMovm, this.gps.getY() - eRegMovm);
+        movement(DIAGONAL_MOVEMENT);
+        this.gps.setLocation(this.gps.getX() + REGULAR_MOVEMENT, this.gps.getY() - REGULAR_MOVEMENT);
     }
 
     protected void movement(double v) {
@@ -117,20 +117,16 @@ public class Robot implements CuriousHungryRobot {
 
     protected Energy detect() {
         // return nearest energy
-        Energy nearestEnergy = field.ping(this.gps);
-        if (nearestEnergy != null) {
-            return nearestEnergy;
-        }
-        return null;
+        return field.ping(this.gps);
     }
 
     protected void consumeEnergy(Energy hungryGoal) { // energy consumed is only for hungry goals
 
 
-        double leftover = hungryGoal.getCharge() + this.robotBattery.checkBattery() - robotEnergyCapacity;
+        double leftover = hungryGoal.getCharge() + this.robotBattery.checkBattery() - ROBOT_ENERGY_CAPACITY;
 
         if (leftover > 0) {
-            this.robotBattery.recharge(robotEnergyCapacity);
+            this.robotBattery.recharge(ROBOT_ENERGY_CAPACITY);
             hungryGoal.setCharge(leftover);
         } else {
             this.robotBattery.recharge(this.robotBattery.checkBattery() + hungryGoal.getCharge());
@@ -143,7 +139,7 @@ public class Robot implements CuriousHungryRobot {
     }
 
     public String checkState() {
-        if (robotBattery.checkBattery() > robotEnergyCapacity / 2) {
+        if (robotBattery.checkBattery() > ROBOT_ENERGY_CAPACITY / 2) {
             this.state = "curious";
         } else if (robotBattery.checkBattery() > 0) {
             this.state = "hungry";
@@ -173,10 +169,11 @@ public class Robot implements CuriousHungryRobot {
     public void goalWalk(int simNumber) {
         // if hungry, and no goal, curious walk.
         if (state == "curious") {
+           // System.out.println("I am curious");
             if (curiousGoal == null) {
                 getCuriousGoal();
             } else if (goalReached(curiousGoal)) {
-                System.out.printf("Curious Goal Reached. Current Battery %f\n", robotBattery.checkBattery());
+               // System.out.printf("Curious Goal Reached. Current Battery %f\n", robotBattery.checkBattery());
                 getCuriousGoal();
             } else {
 
@@ -184,12 +181,12 @@ public class Robot implements CuriousHungryRobot {
             }
 
         } else if (state == "hungry") {
-
+           // System.out.println("I am Hungry");
             if (hungryGoal == null) {
-
                 getHungryGoal(simNumber);
 
             } else if (goalReached(hungryGoal)) {
+              //  System.out.printf("I found a goal nom nom nom.2");
                 consumeEnergy(hungryGoal);
                 hungryGoal = null;
             } else {
@@ -211,14 +208,14 @@ public class Robot implements CuriousHungryRobot {
         Energy nearestEnergy = detect(); // this locates nearest energy
         if (nearestEnergy == null) {
             return;
-        } else if (nearestEnergy.hasVisited() && !memory.contains(nearestEnergy)) {
+        } else if (!nearestEnergy.hasVisited() && !memory.contains(nearestEnergy)){
             if (simNumber == 0) { //stackMemory
                 memory.addFirst(nearestEnergy); //.push(e)
-                nearestEnergy.visited();
+               // nearestEnergy.visited();
 
             } else if (simNumber == 1) { //queueMemoryStyle
                 memory.addLast(nearestEnergy);
-                nearestEnergy.visited();
+               // nearestEnergy.visited();
             }
         }
     }
@@ -291,7 +288,7 @@ public class Robot implements CuriousHungryRobot {
         double X1 = this.gps.getX();
         double Y1 = this.gps.getY();
         int distance = (int) distancePts(X1, Y1, X2, Y2); // maybe change back to double
-        if (distance <= snapDistance) {
+        if (distance <= SNAP_DISTANCE) {
             movement(distance);//costs movement
             setLocation(X2, Y2);
             return true;
