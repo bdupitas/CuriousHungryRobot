@@ -24,7 +24,7 @@ public class Main implements CuriousHungryRobot {
             }
 
             data.computeStats();
-            System.out.print(data.toString());
+            System.out.print(data);
 
 
             simulationRun++;
