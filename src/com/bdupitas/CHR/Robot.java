@@ -3,14 +3,15 @@ package com.bdupitas.CHR;
 import java.awt.Point;
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.Objects;
 
 //The physical state of the robot and physical battery
-public class Robot implements CuriousHungryRobot {
-    private Energy robotBattery; //holds the current energy level of Henry; however this will serve as a way to access energy
-    private Point gps;
+final public class Robot implements CuriousHungryRobot {
+    private final Energy robotBattery; //holds the current energy level of Henry; however this will serve as a way to access energy
+    private final Point gps;
     private double mileage; // the distance traveled
-    private EnergyField field;
-    private Deque<Energy> memory;
+    private final EnergyField field;
+    private final Deque<Energy> memory;
     private String state = "";
 
     Energy hungryGoal;
@@ -23,7 +24,7 @@ public class Robot implements CuriousHungryRobot {
         gps = new Point(0, 0);
         memory = new ArrayDeque<>();
         mileage = 0;
-        checkState();
+        getState();
     }
 
     public double getEnergy() {
@@ -34,11 +35,6 @@ public class Robot implements CuriousHungryRobot {
         return this.mileage;
     }
 
-    //movements
-    protected void whereAmI() { //returns location on x,y
-        System.out.println(this.gps.getLocation());
-    }
-
     public double currentX() {
         return this.gps.getX();
     }
@@ -47,9 +43,6 @@ public class Robot implements CuriousHungryRobot {
         return this.gps.getY();
     }
 
-    public Point currentLocation() {
-        return this.gps;
-    }
 
     public void setLocation(double X2, double Y2) {
         this.gps.setLocation(X2, Y2);
@@ -78,15 +71,6 @@ public class Robot implements CuriousHungryRobot {
 
     protected void snapStraight(double x) {
         movement(x);
-    }
-
-    public void setRobX(double x) { //sets the x value after a snap distance
-        this.gps.setLocation(x, gps.getY());
-    }
-
-    public void setRobY(double y) {
-        this.gps.setLocation(gps.getX(), y);
-
     }
 
     protected void stepNorthEast() { //DIAGONAL Northeast  +x +y
@@ -134,17 +118,14 @@ public class Robot implements CuriousHungryRobot {
             hungryGoal.visited();
         }
 
-        return;
-
     }
 
-    public String checkState() {
+    public void getState() {
         if (robotBattery.checkBattery() > ROBOT_ENERGY_CAPACITY / 2) {
             this.state = "curious";
         } else if (robotBattery.checkBattery() > 0) {
             this.state = "hungry";
         }
-        return state;
     }
 
     public void getHungryGoal(int simulationRun) {
@@ -156,37 +137,33 @@ public class Robot implements CuriousHungryRobot {
                 hungryGoal = memory.removeFirst();
             }
 
-        } else if (memory.isEmpty()) {
+        } else {
             step(curiousGoal); // no memory curious walk.
         }
 
     }
 
-    private void setState(String state) {
-        this.state = state;
-    }
-
     public void goalWalk(int simNumber) {
         // if hungry, and no goal, curious walk.
-        if (state == "curious") {
-           // System.out.println("I am curious");
+        if (Objects.equals(state, "curious")) {
+            // System.out.println("I am curious");
             if (curiousGoal == null) {
                 getCuriousGoal();
             } else if (goalReached(curiousGoal)) {
-               // System.out.printf("Curious Goal Reached. Current Battery %f\n", robotBattery.checkBattery());
+                // System.out.printf("Curious Goal Reached. Current Battery %f\n", robotBattery.checkBattery());
                 getCuriousGoal();
             } else {
 
                 step(curiousGoal);
             }
 
-        } else if (state == "hungry") {
-           // System.out.println("I am Hungry");
+        } else if (Objects.equals(state, "hungry")) {
+            // System.out.println("I am Hungry");
             if (hungryGoal == null) {
                 getHungryGoal(simNumber);
 
             } else if (goalReached(hungryGoal)) {
-              //  System.out.printf("I found a goal nom nom nom.2");
+                //  System.out.printf("I found a goal nom nom nom.2");
                 consumeEnergy(hungryGoal);
                 hungryGoal = null;
             } else {
@@ -194,94 +171,82 @@ public class Robot implements CuriousHungryRobot {
                 step(hungryGoal);
             }
         }
-
-        checkState();
+        getState();
         detectEnergy(simNumber);
     }
 
 
-    private void curiousHungryWalk() {
-
-    }
-
     private void detectEnergy(int simNumber) {
         Energy nearestEnergy = detect(); // this locates nearest energy
-        if (nearestEnergy == null) {
-            return;
-        } else if (!nearestEnergy.hasVisited() && !memory.contains(nearestEnergy)){
+
+        if (nearestEnergy != null && !nearestEnergy.hasVisited() && !memory.contains(nearestEnergy)) {
             if (simNumber == 0) { //stackMemory
                 memory.addFirst(nearestEnergy); //.push(e)
-               // nearestEnergy.visited();
+                // nearestEnergy.visited();
 
             } else if (simNumber == 1) { //queueMemoryStyle
                 memory.addLast(nearestEnergy);
-               // nearestEnergy.visited();
+                // nearestEnergy.visited();
             }
         }
     }
 
 
     private void step(Energy goal) {
-        boolean xGoal = false, yGoal = false;
 
         //goal location
-        double gPointx = goal.getX();
-        double gPointy = goal.getY();
+        double goalX = goal.getX();
+        double goalY = goal.getY();
 
         //current location
-        double cPointx = this.currentX();
-        double cPointy = this.currentY();
+        double currentX = this.currentX();
+        double currentY = this.currentY();
 
-        if (gPointx == cPointx && gPointy == cPointy) {
+        if (goal.getLocation().equals(this.gps)) {
             getCuriousGoal();
         }
 
         //if any of these come back true this will inform the code below if a snap will happen, if true then this robot will 'snap' towards whichever location
-        boolean Snap = checkSnap(gPointx, gPointy);
+        boolean Snap = checkSnap(goalX, goalY);
+        if (!Snap) {
+            //check if the robot is on the same plane, if so, the robot will travel along the plane, heading north, south, east or west
+            if (!(currentX == goalX) && !(currentY == goalY)) {
+                if (currentX < goalX && currentY < goalY) {//North-east
+                    stepNorthEast();
 
-        // if by any chance the value of the xValue or yValue is equal to the goal the robot will attempt to conserve energy and travel no,we,ea,so.
-        if (cPointx == gPointx) {
-            xGoal = true;
-        }
-        if (cPointy == gPointx) {
-            yGoal = true;
+                }
+                if (currentX > goalX && currentY < goalY) { //NorthWest
+                    stepNorthWest();
+
+                }
+                if (currentX < goalX && currentY > goalY) {// southEast
+                    stepSouthEast();
+
+                }
+                if (currentX > goalX && currentY > goalY) {//Southwest
+                    stepSouthWest();
+
+                }
+
+            }
+            // when diagonals are not optimal
+            else {
+                if (currentX < goalX) { //east
+                    moveEast();
+                }
+                if (currentX > goalX) { // west
+                    moveWest();
+                }
+                if (currentY < goalY) { // north
+                    moveNorth();
+                }
+                if (currentY > goalY) { //south
+                    moveSouth();
+                }
+            }
 
         }
 
-        // these points will also remind Henry that once a point is achieved, to start heading and getting the point
-        if (cPointx < gPointx && cPointy < gPointy && !xGoal && !yGoal) {//North-east
-            stepNorthEast();
-            return;
-        }
-        if (cPointx > gPointx && cPointy < gPointy && !xGoal && !yGoal) { //NorthWest
-            stepNorthWest();
-            return;
-        }
-        if (cPointx < gPointx && cPointy > gPointy && !xGoal && !yGoal) {// southEast
-            stepSouthEast();
-            return;
-        }
-        if (cPointx > gPointx && cPointy > gPointy && !xGoal && !yGoal) {//Southwest
-            stepSouthWest();
-            return;
-        }
-        // when diagonals are not optimal
-        if (cPointx < gPointx) { //east
-            moveEast();
-            return;
-        }
-        if (cPointx > gPointx) { // west
-            moveWest();
-            return;
-        }
-        if (cPointy < gPointy) { // north
-            moveNorth();
-            return;
-        }
-        if (cPointy > gPointy) { //west
-            moveSouth();
-            return;
-        }
     }
 
     private boolean checkSnap(double X2, double Y2) { //method that detects snaps
@@ -315,6 +280,4 @@ public class Robot implements CuriousHungryRobot {
     double getRandomCoordinate() { //generates a random coordinate in int
         return (Math.random() * 401) - 200;
     }
-
-
 }

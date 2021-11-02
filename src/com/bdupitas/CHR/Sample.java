@@ -10,7 +10,6 @@ public class Sample {
     private double standardDeviation;
     private double min;
     private double max;
-    private Random r;
     private String name;
     protected ArrayList<Double> data;
 
@@ -23,18 +22,13 @@ public class Sample {
     }
 
     public String getName() {
-        String name = this.name;
-        return name;
+        return this.name;
     }
 
-    public void clearData() {
-        this.data.clear();
-    }
 
 
     public double getSTdev() {
-        double d = this.standardDeviation;
-        return d;
+        return this.standardDeviation;
     }
 
     void setSTdev(double stDev) {
@@ -63,8 +57,7 @@ public class Sample {
     }
 
     public double getMin() {
-        double d = this.min;
-        return d;
+        return this.min;
     }
 
     private void setMax(double d) {
@@ -88,17 +81,14 @@ public class Sample {
     }
 
     public double getMedian() {
-        double d = this.median;
-        return d;
+        return this.median;
     }
 
     public void computeStats() {
         sortData(this.data);//also this method sorts the data
 
-        int i = this.getTrials();
-
-        this.setMin(data.get(0));
-        this.setMax(data.get(i - 1));
+        this.setMin(Collections.min(data));
+        this.setMax(Collections.max(data));
 
         this.setMean(calcMean(data));
         this.setMedian(calcMedian(data));
@@ -116,8 +106,8 @@ public class Sample {
 
     private double calcMedian(ArrayList<Double> data) {
         int size = this.data.size();//size
-        double runTot = 0;
-        double finTotal = 0;
+        double runTot;
+        double finTotal ;
 
         if (size % 2 == 0) {
             runTot = listAt(size / 2) + data.get((size + 1) / 2);
@@ -145,7 +135,6 @@ public class Sample {
 
     double getRandomVal() {
         Random r = new Random();
-        double value = data.get(r.nextInt(data.size()));
-        return value;
+        return data.get(r.nextInt(data.size()));
     }
 }

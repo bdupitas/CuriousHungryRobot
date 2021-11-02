@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 
 public class EnergyField implements CuriousHungryRobot {
-    private ArrayList<Energy> energyPoint;
+    private final ArrayList<Energy> energyPoint;
 
     EnergyField() {
         energyPoint = new ArrayList<>();
@@ -17,7 +17,7 @@ public class EnergyField implements CuriousHungryRobot {
         verifyIntervals();
     }
 
-    private void verifyIntervals() { //change it to a nested for
+    private void verifyIntervals() { //continues until all the points are spaced out
         boolean badPointExists = true;
         do {
             for (int i = 0; i < energyPoint.size() - 1; i++) {
@@ -47,12 +47,7 @@ public class EnergyField implements CuriousHungryRobot {
     }
 
     double distancePoints(Point A, Point B) {
-        double X1 = A.getX();
-        double Y1 = A.getY();
-        double X2 = B.getX();
-        double Y2 = B.getY();
-        return Math.hypot((X2 - X1), (Y2 - Y1));
-
+        return Math.hypot((B.getX() - A.getX()), (B.getY() - A.getY()));
     }
 
     public Energy ping(Point currentLocation) { //returns the location of a point that is close

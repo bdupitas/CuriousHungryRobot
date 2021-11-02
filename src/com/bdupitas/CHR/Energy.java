@@ -1,13 +1,11 @@
-package com.bdupitas.CHR;//the all knowing energy that exists in this virtual simulation
+package com.bdupitas.CHR;//the all-knowing energy that exists in this virtual simulation
 
 import java.awt.Point;
-import java.util.*;
+
 
 public class Energy implements CuriousHungryRobot {
     private double robotBatteryLevel;//robot has energy, this is where the energy comes from
     private double charge; //the energy hub energy
-    protected Energy[] energyLocations; // holds obj
-    private List<Energy> energyPoint; //holds energy point
     private Point location; // energy stores
     private boolean reached; // this will hold values if reached or not before, this will prevent a point from being redetected and stored
 
@@ -27,23 +25,6 @@ public class Energy implements CuriousHungryRobot {
         this.robotBatteryLevel = batteryLevel;
     }
 
-
-
-
-//    public void initializeEnergyField() {
-//        //  this.energyLocations = new Energy[numberOfEnergyHubs]; //produces n charges
-    // this.energyPoint = new ArrayList<>();
-//
-//        for (Energy points : 33) {
-//            points = new Energy(); // creations an energy points
-//            energyPoint.add(points); //addint these points after they have all been instantiated to the arraylist
-//        }
-//        verifyIntervals();
-//    }
-
-//    Energy(double x) {
-//        this.robotBatteryLevel = x; //initilizes robot Energy
-//    }
 
     public double getCharge() { //returns level of energy hub
         return this.charge;
@@ -97,23 +78,4 @@ public class Energy implements CuriousHungryRobot {
 
     }
 
-
-//    protected Energy ping(double rX, double rY) { //returns the location of a point that is close
-//        Energy eHub;
-//        List<Energy> temp = this.energyPoint;
-//        for (int i = 0; i < energyPoint.size(); i++) {
-//            eHub = energyPoint.get(i);
-//            double X = (rX);
-//            double Y = (rY);
-//            double tX = (eHub.getX());
-//            double tY = (eHub.getY());
-//            double distance = distancePts(rX, rY, tX, tY);
-//            if (distance <= 13) {
-//                return eHub;
-//            }
-//
-//        }
-//
-//        return null;
-//    }
 }
